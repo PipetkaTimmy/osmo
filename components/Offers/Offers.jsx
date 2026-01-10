@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import Dots from "../Dots";
 
@@ -29,8 +31,18 @@ const Offers = () => {
   );
   const [activeIndex, setActiveIndex] = useState(0);
   const itemRefs = useRef([]);
-  const turbulenceAnimRef = useRef(null);
-  const displacementAnimRef = useRef(null);
+  const pixiContainerRef = useRef(null);
+  const pixiAppRef = useRef(null);
+  const pixiStateRef = useRef({
+    textures: [],
+    currentIndex: 0,
+    currentSprite: null,
+    nextSprite: null,
+    displacementFilter: null,
+    imageContainer: null,
+    fitSprite: null,
+    isTransitioning: false,
+  });
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -55,12 +67,194 @@ const Offers = () => {
   }, []);
 
   useEffect(() => {
-    if (turbulenceAnimRef.current?.beginElement) {
-      turbulenceAnimRef.current.beginElement();
+    let isMounted = true;
+    let cleanupResize = null;
+
+    const initPixi = async () => {
+      if (!pixiContainerRef.current) return;
+      const pixi = await import("pixi.js");
+      if (!isMounted) return;
+
+      const app = new pixi.Application();
+      await app.init({
+        backgroundAlpha: 0,
+        antialias: true,
+      });
+      app.ticker.start();
+      pixiAppRef.current = app;
+      pixiContainerRef.current.innerHTML = "";
+      pixiContainerRef.current.appendChild(app.canvas);
+      app.canvas.style.width = "100%";
+      app.canvas.style.height = "100%";
+      app.canvas.style.display = "block";
+
+      const createNoiseTexture = () => {
+        const size = 256;
+        const canvas = document.createElement("canvas");
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext("2d");
+        const imageData = ctx.createImageData(size, size);
+        for (let i = 0; i < imageData.data.length; i += 4) {
+          const value = Math.random() * 255;
+          imageData.data[i] = value;
+          imageData.data[i + 1] = value;
+          imageData.data[i + 2] = value;
+          imageData.data[i + 3] = 255;
+        }
+        ctx.putImageData(imageData, 0, 0);
+        const texture = pixi.Texture.from(canvas);
+        texture.source.addressMode = "repeat";
+        return texture;
+      };
+
+      const loadedTextures = await Promise.all(
+        items.map(async (item) => {
+          try {
+            return await pixi.Assets.load(item.image);
+          } catch {
+            return null;
+          }
+        })
+      );
+      if (!isMounted) return;
+      const textures = loadedTextures.map(
+        (texture) => texture || pixi.Texture.EMPTY
+      );
+
+      const noiseSprite = new pixi.Sprite(createNoiseTexture());
+      noiseSprite.alpha = 0.001;
+      noiseSprite.width = app.screen.width;
+      noiseSprite.height = app.screen.height;
+      const displacementFilter = new pixi.DisplacementFilter(noiseSprite);
+      displacementFilter.scale.set(0, 0);
+      const imageContainer = new pixi.Container();
+      imageContainer.filters = [displacementFilter];
+      app.stage.addChild(noiseSprite);
+      app.stage.addChild(imageContainer);
+
+      const currentSprite = new pixi.Sprite(textures[0]);
+      const nextSprite = new pixi.Sprite(textures[0]);
+      nextSprite.alpha = 0;
+      imageContainer.addChild(currentSprite);
+      imageContainer.addChild(nextSprite);
+
+      const fitSprite = (sprite) => {
+        if (!sprite.texture?.width || !sprite.texture?.height) return;
+        const scale = Math.max(
+          app.screen.width / sprite.texture.width,
+          app.screen.height / sprite.texture.height
+        );
+        sprite.width = sprite.texture.width * scale;
+        sprite.height = sprite.texture.height * scale;
+        sprite.x = (app.screen.width - sprite.width) / 2;
+        sprite.y = (app.screen.height - sprite.height) / 2;
+      };
+
+      const resizeAll = () => {
+        const width = pixiContainerRef.current?.clientWidth || 0;
+        const height = pixiContainerRef.current?.clientHeight || 0;
+        if (!width || !height) return;
+        app.renderer.resize(width, height);
+        noiseSprite.width = app.screen.width;
+        noiseSprite.height = app.screen.height;
+        fitSprite(currentSprite);
+        fitSprite(nextSprite);
+        app.render();
+      };
+
+      resizeAll();
+      fitSprite(currentSprite);
+      const onResize = () => resizeAll();
+      const resizeObserver = new ResizeObserver(onResize);
+      resizeObserver.observe(pixiContainerRef.current);
+      cleanupResize = () => {
+        resizeObserver.disconnect();
+        window.removeEventListener("resize", onResize);
+      };
+
+      pixiStateRef.current = {
+        textures,
+        currentIndex: 0,
+        currentSprite,
+        nextSprite,
+        displacementFilter,
+        imageContainer,
+        fitSprite,
+        isTransitioning: false,
+      };
+
+      app.render();
+    };
+
+    initPixi();
+
+    return () => {
+      isMounted = false;
+      if (cleanupResize) cleanupResize();
+      if (pixiAppRef.current) {
+        pixiAppRef.current.destroy(true);
+        pixiAppRef.current = null;
+      }
+    };
+  }, [items]);
+
+  useEffect(() => {
+    const app = pixiAppRef.current;
+    const state = pixiStateRef.current;
+    if (!app || !state.textures.length) return;
+    if (activeIndex === state.currentIndex) return;
+    if (activeIndex >= state.textures.length) return;
+
+    const {
+      currentSprite,
+      nextSprite,
+      displacementFilter,
+      textures,
+      fitSprite,
+    } = state;
+
+    if (state.isTransitioning) return;
+    state.isTransitioning = true;
+    const nextTexture = textures[activeIndex];
+    if (!nextTexture?.width || !nextTexture?.height) {
+      state.currentIndex = activeIndex;
+      return;
     }
-    if (displacementAnimRef.current?.beginElement) {
-      displacementAnimRef.current.beginElement();
+    nextSprite.texture = nextTexture;
+    if (fitSprite) {
+      fitSprite(nextSprite);
     }
+    nextSprite.alpha = 0;
+    displacementFilter.scale.set(0, 0);
+
+    const duration = 0.8;
+    const maxScale = 160;
+    let elapsed = 0;
+
+    const tick = () => {
+      elapsed += app.ticker.deltaMS / 1000;
+      const progress = Math.min(elapsed / duration, 1);
+      const wave = Math.sin(progress * Math.PI);
+      displacementFilter.scale.set(wave * maxScale, wave * maxScale);
+      currentSprite.alpha = 1 - progress;
+      nextSprite.alpha = progress;
+
+      if (progress >= 1) {
+        currentSprite.texture = textures[activeIndex];
+        if (fitSprite) {
+          fitSprite(currentSprite);
+        }
+        currentSprite.alpha = 1;
+        nextSprite.alpha = 0;
+        displacementFilter.scale.set(0, 0);
+        state.currentIndex = activeIndex;
+        state.isTransitioning = false;
+        app.ticker.remove(tick);
+      }
+    };
+
+    app.ticker.add(tick);
   }, [activeIndex]);
 
   return (
@@ -71,54 +265,8 @@ const Offers = () => {
       </div>
       <div className="offersContainer">
         <div className="offersSticky">
-          <div className="offersMedia" style={{ filter: "url(#glitch-filter)" }}>
-            <svg className="offersFilter" aria-hidden="true">
-              <defs>
-                <filter id="glitch-filter">
-                  <feTurbulence
-                    type="turbulence"
-                    baseFrequency="0.01 0.02"
-                    numOctaves="2"
-                    seed={activeIndex + 1}
-                    result="noise"
-                  >
-                    <animate
-                      attributeName="baseFrequency"
-                      dur="0.7s"
-                      values="0.01 0.02;0.18 0.24;0.01 0.02"
-                      repeatCount="1"
-                      begin="indefinite"
-                      ref={turbulenceAnimRef}
-                    />
-                  </feTurbulence>
-                  <feDisplacementMap
-                    in="SourceGraphic"
-                    in2="noise"
-                    scale="0"
-                    xChannelSelector="R"
-                    yChannelSelector="G"
-                  >
-                    <animate
-                      attributeName="scale"
-                      dur="0.7s"
-                      values="0;120;0"
-                      repeatCount="1"
-                      begin="indefinite"
-                      ref={displacementAnimRef}
-                    />
-                  </feDisplacementMap>
-                </filter>
-              </defs>
-            </svg>
-            {items.map((item, index) => (
-              <img
-                key={`${item.image}-${index}`}
-                className={`offersImage ${index === activeIndex ? "is-active" : ""
-                  }`}
-                src={item.image}
-                alt={item.title}
-              />
-            ))}
+          <div className="offersMedia">
+            <div className="offersCanvas" ref={pixiContainerRef} />
           </div>
         </div>
         <div className="offersTrack">
