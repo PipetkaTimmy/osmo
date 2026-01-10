@@ -39,6 +39,7 @@ const Offers = () => {
     currentSprite: null,
     nextSprite: null,
     displacementFilter: null,
+    displacementSprite: null,
     imageContainer: null,
     fitSprite: null,
     isTransitioning: false,
@@ -88,26 +89,6 @@ const Offers = () => {
       app.canvas.style.height = "100%";
       app.canvas.style.display = "block";
 
-      const createNoiseTexture = () => {
-        const size = 256;
-        const canvas = document.createElement("canvas");
-        canvas.width = size;
-        canvas.height = size;
-        const ctx = canvas.getContext("2d");
-        const imageData = ctx.createImageData(size, size);
-        for (let i = 0; i < imageData.data.length; i += 4) {
-          const value = Math.random() * 255;
-          imageData.data[i] = value;
-          imageData.data[i + 1] = value;
-          imageData.data[i + 2] = value;
-          imageData.data[i + 3] = 255;
-        }
-        ctx.putImageData(imageData, 0, 0);
-        const texture = pixi.Texture.from(canvas);
-        texture.source.addressMode = "repeat";
-        return texture;
-      };
-
       const loadedTextures = await Promise.all(
         items.map(async (item) => {
           try {
@@ -122,15 +103,15 @@ const Offers = () => {
         (texture) => texture || pixi.Texture.EMPTY
       );
 
-      const noiseSprite = new pixi.Sprite(createNoiseTexture());
-      noiseSprite.alpha = 0.001;
-      noiseSprite.width = app.screen.width;
-      noiseSprite.height = app.screen.height;
-      const displacementFilter = new pixi.DisplacementFilter(noiseSprite);
+      const displacementSprite = new pixi.Sprite(textures[0]);
+      displacementSprite.alpha = 0.001;
+      displacementSprite.width = app.screen.width;
+      displacementSprite.height = app.screen.height;
+      const displacementFilter = new pixi.DisplacementFilter(displacementSprite);
       displacementFilter.scale.set(0, 0);
       const imageContainer = new pixi.Container();
       imageContainer.filters = [displacementFilter];
-      app.stage.addChild(noiseSprite);
+      app.stage.addChild(displacementSprite);
       app.stage.addChild(imageContainer);
 
       const currentSprite = new pixi.Sprite(textures[0]);
@@ -156,10 +137,11 @@ const Offers = () => {
         const height = pixiContainerRef.current?.clientHeight || 0;
         if (!width || !height) return;
         app.renderer.resize(width, height);
-        noiseSprite.width = app.screen.width;
-        noiseSprite.height = app.screen.height;
+        displacementSprite.width = app.screen.width;
+        displacementSprite.height = app.screen.height;
         fitSprite(currentSprite);
         fitSprite(nextSprite);
+        fitSprite(displacementSprite);
         app.render();
       };
 
@@ -179,6 +161,7 @@ const Offers = () => {
         currentSprite,
         nextSprite,
         displacementFilter,
+        displacementSprite,
         imageContainer,
         fitSprite,
         isTransitioning: false,
@@ -210,6 +193,7 @@ const Offers = () => {
       currentSprite,
       nextSprite,
       displacementFilter,
+      displacementSprite,
       textures,
       fitSprite,
     } = state;
@@ -225,16 +209,21 @@ const Offers = () => {
     if (fitSprite) {
       fitSprite(nextSprite);
     }
+    displacementSprite.texture = nextTexture;
+    if (fitSprite) {
+      fitSprite(displacementSprite);
+    }
     nextSprite.alpha = 0;
     displacementFilter.scale.set(0, 0);
 
-    const duration = 0.8;
-    const maxScale = 160;
+    const duration = 0.7;
+    const maxScale = 480;
     let elapsed = 0;
 
     const tick = () => {
       elapsed += app.ticker.deltaMS / 1000;
-      const progress = Math.min(elapsed / duration, 1);
+      const ease = (t) => t * t * (3 - 2 * t); // smoothstep
+      const progress = ease(Math.min(elapsed / duration, 1));
       const wave = Math.sin(progress * Math.PI);
       displacementFilter.scale.set(wave * maxScale, wave * maxScale);
       currentSprite.alpha = 1 - progress;

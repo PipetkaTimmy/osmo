@@ -14,7 +14,7 @@ export default function Home() {
       <Navbar />
       <section id="hero" className="sectionAnchor"><Hero /></section>
       <section id="services" className="sectionAnchor"><Services /></section>
-      <section id="offers" className="sectionAnchor"><Offers /></section>
+      <section id="offers" className="sectionFull"><Offers /></section>
       <section id="cases" className="sectionAnchor"><Cases /></section>
       <section id="contacts" className="sectionAnchor"><Contacts /></section>
       <section className="sectionAnchor"><Footer /></section>
