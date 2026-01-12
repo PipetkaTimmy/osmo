@@ -250,7 +250,7 @@ const Offers = () => {
     <div className="container">
       <div className="sectionTitle">
         <Dots />
-        <h3>Почему бизнесу выгодно работать с ::osma::</h3>
+        <h3>Почему бизнесу выгодно работать с нами</h3>
       </div>
       <div className="offersContainer">
         <div className="offersSticky">

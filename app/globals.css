@@ -105,7 +105,7 @@
  }
 
  .heroMainText h1 {
-   font-size: 60px;
+   font-size: clamp(34px, calc(1.5686vw + 29.88px), 60px) !important;
    line-height: 100%;
  }
 
@@ -126,7 +126,7 @@
 
  .heroMainText h2 {
    margin-top: 12px;
-   font-size: 18px;
+   font-size: clamp(16px, calc(0.1307vw + 15.49px), 18px) !important;
    line-height: 100%;
  }
 
@@ -152,8 +152,24 @@
    align-items: center;
  }
 
+ .navDock.is-hidden {
+   pointer-events: none;
+ }
+
+ .navDockSide,
+ .navDockCenter {
+   display: flex;
+   align-items: center;
+ }
+
+ .navDockCenter {
+   gap: 8px;
+ }
+
  .navDock--bottom {
-   bottom: 24px;
+   bottom: 30px;
+   width: 100%;
+   justify-content: center;
  }
 
  .navDock--top {
@@ -168,6 +184,29 @@
    background: rgba(30, 30, 30, 0.9);
    border: 1px solid rgba(255, 255, 255, 0.08);
    backdrop-filter: blur(12px);
+ }
+
+ .navMobDockList {
+   display: none;
+   gap: 8px;
+   padding: 10px;
+   border-radius: 999px;
+   background: rgba(30, 30, 30, 0.9);
+   border: 1px solid rgba(255, 255, 255, 0.08);
+   backdrop-filter: blur(12px);
+   width: 100%;
+   max-width: 228px;
+ }
+
+ .navDockMenuButton {
+   display: none;
+   height: 36px;
+   min-width: 140px;
+   padding: 0 18px;
+   border-radius: 999px;
+   background: #c8ff2c;
+   color: #0b0b0b;
+   font-weight: 600;
  }
 
  .navDockLink {
@@ -194,6 +233,68 @@
 
  .navDockLink.is-active {
    color: #0b0b0b;
+ }
+
+ .navOverlay {
+   position: fixed;
+   inset: 0;
+   background: rgba(10, 10, 10, 0.78);
+   backdrop-filter: blur(16px);
+   z-index: 100;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   padding: 24px;
+ }
+
+ .navOverlayPanel {
+   width: min(560px, 100%);
+   border-radius: 28px;
+   padding: 28px;
+   background: rgba(20, 20, 20, 0.9);
+   border: 1px solid rgba(255, 255, 255, 0.08);
+ }
+
+ .navOverlayHeader {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   color: #ffffff;
+   font-size: 14px;
+   text-transform: uppercase;
+   letter-spacing: 0.08em;
+   margin-bottom: 24px;
+ }
+
+ .navOverlayClose {
+   background: transparent;
+   border: none;
+   color: #c8ff2c;
+   font-weight: 600;
+   cursor: pointer;
+ }
+
+ .navOverlayList {
+   display: flex;
+   flex-direction: column;
+   gap: 18px;
+   margin: 0;
+   padding: 0;
+   list-style: none;
+ }
+
+ .navOverlayLink {
+   display: block;
+   padding: 14px 18px;
+   border-radius: 16px;
+   text-decoration: none;
+   color: #ffffff;
+   font-size: 20px;
+   background: rgba(255, 255, 255, 0.04);
+ }
+
+ .navOverlayLink:hover {
+   background: rgba(255, 255, 255, 0.08);
  }
 
  .wpBtn,
@@ -226,7 +327,7 @@
  .sectionTitle {
    display: flex;
    gap: 12px;
-   font-size: 20px;
+   font-size: clamp(18px, calc(0.1307vw + 17.49px), 20px) !important;
    align-items: center;
    line-height: 100%;
  }
@@ -262,7 +363,7 @@
  }
 
  .serviceHeader h3 {
-   font-size: 20px;
+   font-size: clamp(18px, calc(0.1307vw + 17.49px), 20px) !important;
    margin-bottom: 12px;
    text-align: center;
  }
@@ -277,7 +378,7 @@
  }
 
  .serviceList h4 {
-   font-size: 16px;
+   font-size: clamp(13px, calc(0.1961vw + 12.24px), 16px) !important;
    font-weight: 400;
    margin: 0;
  }
@@ -295,7 +396,7 @@
 
  .serviceButton {
    width: 100%;
-   font-size: 20px;
+   font-size: clamp(16px, calc(0.2614vw + 14.98px), 20px) !important;
    height: 64px;
    font-weight: 600;
  }
@@ -303,6 +404,19 @@
  @media (max-width: 960px) {
    .servicesContainer {
      grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+ }
+
+ @media (max-width: 768px) {
+   .navDockList {
+     display: none;
+   }
+
+   .navDockMenuButton {
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     width: 100%;
    }
  }
 
@@ -362,7 +476,7 @@
  }
 
  .offersItem h4 {
-   font-size: 32px;
+   font-size: clamp(24px, calc(0.5229vw + 21.96px), 32px) !important;
    margin-bottom: 24px;
    line-height: 100%;
    color: #c8ff2c;
@@ -372,7 +486,7 @@
  .offersItem p {
    margin: 0;
    color: #fff;
-   font-size: 18px;
+   font-size: clamp(16px, calc(0.1307vw + 15.49px), 18px) !important;
    max-width: 415px;
    width: 100%;
  }
@@ -427,14 +541,14 @@
  }
 
  .caseCardHeaderItem h3 {
-   font-size: 14px;
+   font-size: clamp(14px, calc(0.2614vw + 12.98px), 18px) !important;
    font-weight: 500;
    margin: 0;
    color: #ffffff;
  }
 
  .caseCard p {
-   font-size: 32px;
+   font-size: clamp(24px, calc(0.5229vw + 21.96px), 32px);
    font-weight: 600;
    line-height: 100%;
    max-width: 366px;
@@ -469,8 +583,14 @@
 
  .contactsContainer {
    display: flex;
-   gap: 8px;
+   gap: 18px;
    width: 100%;
+   flex-direction: column;
+ }
+
+ .userInputs {
+   display: flex;
+   gap: 8px;
  }
 
  .textArea {
@@ -511,6 +631,78 @@
    color: #fff;
  }
 
+ .contactActions {
+   display: flex;
+   flex-direction: column;
+   gap: 12px;
+ }
+
+ .contactError {
+   color: #ff7a7a;
+   font-size: 14px;
+ }
+
+ .contactToast {
+   position: fixed;
+   inset: 24px 24px auto 24px;
+   padding: 18px 24px;
+   border-radius: 20px;
+   background: rgba(20, 20, 20, 0.9);
+   border: 1px solid rgba(255, 255, 255, 0.08);
+   opacity: 0;
+   pointer-events: none;
+   transform: translateY(-20px) scale(0.98);
+   transition: opacity 0.4s ease, transform 0.5s ease;
+   overflow: hidden;
+   z-index: 120;
+ }
+
+ .contactToast.is-visible {
+   opacity: 1;
+   pointer-events: auto;
+   transform: translateY(0) scale(1);
+ }
+
+ .contactToastGlow {
+   position: absolute;
+   inset: -40% 0 auto;
+   height: 140%;
+   background: radial-gradient(circle, rgba(200, 255, 44, 0.35) 0%, transparent 70%);
+   animation: toastPulse 2.4s ease-in-out infinite;
+ }
+
+ .contactToastContent {
+   position: relative;
+   z-index: 1;
+   color: #ffffff;
+   display: grid;
+   gap: 4px;
+ }
+
+ .contactToastTitle {
+   font-weight: 600;
+   text-transform: uppercase;
+   letter-spacing: 0.08em;
+   font-size: 12px;
+ }
+
+ @keyframes toastPulse {
+   0% {
+     transform: translateY(10%) scale(0.95);
+     opacity: 0.6;
+   }
+
+   50% {
+     transform: translateY(-4%) scale(1.05);
+     opacity: 1;
+   }
+
+   100% {
+     transform: translateY(10%) scale(0.95);
+     opacity: 0.6;
+   }
+ }
+
  .submitBtn {
    background: #c8ff2c;
    color: #000;
@@ -534,4 +726,83 @@
  .footerContainer span {
    font-size: 16px;
    font-weight: 400;
+ }
+
+
+ @media (max-width: 768px) {
+   .contactsContainer {
+     flex-direction: column;
+   }
+
+   .serviceCard {
+     min-height: 377px;
+     padding: 12px;
+   }
+
+   .serviceButton {
+     height: 42px;
+   }
+
+   .heroContainer {
+     padding: 12px;
+   }
+
+   .caseCard {
+     padding: 12px;
+     min-height: 377px;
+   }
+
+   .footerContainer {
+     height: 160px;
+   }
+
+   body {
+     padding: 8px;
+   }
+
+   .heroTitle {
+     gap: 8px;
+   }
+
+   .dots {
+     grid-template-rows: repeat(2, 6px);
+     grid-template-columns: repeat(2, 6px);
+     gap: 6px;
+     margin-bottom: 4px;
+   }
+
+   .dots span {
+     width: 6px;
+     height: 6px;
+   }
+
+   .sectionTitle .dots {
+     gap: 3px;
+     margin: 0;
+   }
+
+   .sectionTitle .dots span {
+     width: 4px;
+     height: 4px;
+   }
+
+   .caseCard p {
+     max-width: 326px;
+   }
+
+   .container {
+     gap: 24px;
+   }
+
+   .submitBtn {
+     border-radius: 12px;
+   }
+
+   .navMobDockList {
+     display: flex;
+   }
+
+   .userInputs {
+     flex-direction: column;
+   }
  }
