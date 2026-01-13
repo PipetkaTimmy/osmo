@@ -181,8 +181,8 @@
    gap: 8px;
    padding: 6px;
    border-radius: 999px;
-   background: rgba(30, 30, 30, 0.9);
-   border: 1px solid rgba(255, 255, 255, 0.08);
+   background: #d3d3d338;
+   border: 1px solid #ffffff14;
    backdrop-filter: blur(12px);
  }
 
@@ -350,9 +350,9 @@
  }
 
  .serviceCard {
+   position: relative;
+   overflow: hidden;
    background-color: #1a1a1a;
-   background-size: cover;
-   background-position: center;
    border-radius: 24px;
    padding: 28px;
    min-height: 600px;
@@ -360,6 +360,28 @@
    flex-direction: column;
    justify-content: space-between;
    color: #f5f5f5;
+ }
+
+ .serviceCard::before {
+   content: "";
+   position: absolute;
+   inset: 0;
+   background-image: inherit;
+   background-size: cover;
+   background-position: left center;
+   transition: transform 0.6s ease;
+   transform-origin: left center;
+   border-radius: inherit;
+   z-index: 0;
+ }
+
+ .serviceCard:hover::before {
+   transform: scale(1.2);
+ }
+
+ .serviceCard>* {
+   position: relative;
+   z-index: 1;
  }
 
  .serviceHeader h3 {
@@ -399,6 +421,12 @@
    font-size: clamp(16px, calc(0.2614vw + 14.98px), 20px) !important;
    height: 64px;
    font-weight: 600;
+   transition: background 0.5s ease, color 0.5s ease;
+ }
+
+ .serviceCard:hover .serviceButton {
+  background: #c8ff2c !important;
+  color: #0b0b0b;
  }
 
  @media (max-width: 960px) {
@@ -508,7 +536,31 @@
    display: flex;
    flex-direction: column;
    justify-content: space-between;
+   position: relative;
+   overflow: hidden;
 
+ }
+
+ .caseCard::before {
+   content: "";
+   position: absolute;
+   inset: 0;
+   background-image: inherit;
+   background-size: cover;
+   background-position: left center;
+   transform-origin: left center;
+   transition: transform 0.7s ease;
+   border-radius: inherit;
+   z-index: 0;
+ }
+
+ .caseCard:hover::before {
+   transform: scale(1.18);
+ }
+
+ .caseCard > * {
+   position: relative;
+   z-index: 1;
  }
 
  .caseCardHeader {
@@ -532,12 +584,14 @@
    border-radius: 8px;
    background: #ffffff1f;
    backdrop-filter: blur(20px);
+   transition: background 0.4s ease, color 0.4s ease;
  }
 
  .caseCardHeaderItem img {
    width: 20px;
    height: 20px;
    object-fit: contain;
+   transition: filter 0.4s ease;
  }
 
  .caseCardHeaderItem h3 {
@@ -545,6 +599,19 @@
    font-weight: 500;
    margin: 0;
    color: #ffffff;
+   transition: color 0.4s ease;
+ }
+
+ .caseCard:hover .caseCardHeaderItem {
+   background: #c8ff2c;
+ }
+
+ .caseCard:hover .caseCardHeaderItem h3 {
+   color: #0b0b0b;
+ }
+
+ .caseCard:hover .caseCardHeaderItem img {
+   filter: brightness(0) saturate(100%);
  }
 
  .caseCard p {

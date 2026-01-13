@@ -14,28 +14,28 @@ const ServiceCard = ({
         : undefined;
 
     return (
-        <div className="serviceCard" style={cardStyle}>
-            <div className="serviceHeader">
-                <h3>{title}</h3>
-                {hasItems && (
-                    <div className="serviceList">
-                        {items.map((item, index) => (
-                            <React.Fragment key={`${item}-${index}`}>
-                                <h4>{item}</h4>
-                                {index < items.length - 1 && (
-                                    <span className="serviceListDot" aria-hidden="true" />
-                                )}
-                            </React.Fragment>
-                        ))}
-                    </div>
-                )}
-            </div>
-            <a href={buttonHref}>
+        <a href={buttonHref}>
+            <div className="serviceCard" style={cardStyle}>
+                <div className="serviceHeader">
+                    <h3>{title}</h3>
+                    {hasItems && (
+                        <div className="serviceList">
+                            {items.map((item, index) => (
+                                <React.Fragment key={`${item}-${index}`}>
+                                    <h4>{item}</h4>
+                                    {index < items.length - 1 && (
+                                        <span className="serviceListDot" aria-hidden="true" />
+                                    )}
+                                </React.Fragment>
+                            ))}
+                        </div>
+                    )}
+                </div>
                 <Button className="serviceButton">
                     {buttonLabel}
                 </Button>
-            </a>
-        </div>
+            </div>
+        </a>
     );
 };
 
