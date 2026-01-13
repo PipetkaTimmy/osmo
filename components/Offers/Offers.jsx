@@ -31,6 +31,8 @@ const Offers = () => {
   );
   const [activeIndex, setActiveIndex] = useState(0);
   const itemRefs = useRef([]);
+  const offersRef = useRef(null);
+  const [isOffersVisible, setIsOffersVisible] = useState(false);
   const pixiContainerRef = useRef(null);
   const pixiAppRef = useRef(null);
   const pixiStateRef = useRef({
@@ -68,6 +70,23 @@ const Offers = () => {
   }, []);
 
   useEffect(() => {
+    const target = offersRef.current;
+    if (!target) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsOffersVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "200px 0px", threshold: 0.1 }
+    );
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!isOffersVisible) return;
     let isMounted = true;
     let cleanupResize = null;
 
@@ -170,7 +189,9 @@ const Offers = () => {
       app.render();
     };
 
-    initPixi();
+    if (!pixiAppRef.current) {
+      initPixi();
+    }
 
     return () => {
       isMounted = false;
@@ -180,7 +201,7 @@ const Offers = () => {
         pixiAppRef.current = null;
       }
     };
-  }, [items]);
+  }, [items, isOffersVisible]);
 
   useEffect(() => {
     const app = pixiAppRef.current;
@@ -252,7 +273,7 @@ const Offers = () => {
         <Dots />
         <h3>Почему бизнесу выгодно работать с нами</h3>
       </div>
-      <div className="offersContainer">
+      <div className="offersContainer" ref={offersRef}>
         <div className="offersSticky">
           <div className="offersMedia">
             <div className="offersCanvas" ref={pixiContainerRef} />

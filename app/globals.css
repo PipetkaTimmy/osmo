@@ -313,7 +313,12 @@
  }
 
  .callBtn {
-   padding: 10px;
+   padding: 6px;
+ }
+
+ .callBtn img {
+   width: 36px;
+   height: 36px;
  }
 
  .container {
@@ -425,8 +430,8 @@
  }
 
  .serviceCard:hover .serviceButton {
-  background: #c8ff2c !important;
-  color: #0b0b0b;
+   background: #c8ff2c !important;
+   color: #0b0b0b;
  }
 
  @media (max-width: 960px) {
@@ -558,7 +563,7 @@
    transform: scale(1.18);
  }
 
- .caseCard > * {
+ .caseCard>* {
    position: relative;
    z-index: 1;
  }
@@ -790,9 +795,16 @@
    height: 348px;
  }
 
+ .footerContainer img {
+   max-width: 506px;
+   width: 100%;
+   height: auto;
+ }
+
  .footerContainer span {
    font-size: 16px;
    font-weight: 400;
+   color: rgba(255, 255, 255, 0.7);
  }
 
 

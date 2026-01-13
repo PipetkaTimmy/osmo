@@ -1,5 +1,6 @@
 ﻿"use client";
 
+import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@heroui/react";
@@ -122,7 +123,7 @@ const Navbar = () => {
           transition={{ type: "spring", stiffness: 220, damping: 24 }}
         >
           <Button isIconOnly className="wpBtn">
-            <img src="/contacts/wp.png" alt="" />
+            <Image src="/contacts/wp.png" alt="WhatsApp" width={24} height={24} />
           </Button>
         </motion.div>
         <motion.div
@@ -177,7 +178,7 @@ const Navbar = () => {
           transition={{ type: "spring", stiffness: 220, damping: 24 }}
         >
           <Button isIconOnly className="callBtn">
-            <img src="/contacts/call.png" alt="" />
+            <Image src="/contacts/call.png" alt="Позвонить" width={24} height={24} />
           </Button>
         </motion.div>
       </nav>
