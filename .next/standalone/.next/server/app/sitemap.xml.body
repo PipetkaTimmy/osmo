@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+<loc>https://osmolab.kz</loc>
+<lastmod>2026-01-18T15:20:44.936Z</lastmod>
+<changefreq>weekly</changefreq>
+<priority>1</priority>
+</url>
+<url>
+<loc>https://osmolab.kz/services/websites</loc>
+<lastmod>2026-01-18T15:20:44.936Z</lastmod>
+<changefreq>weekly</changefreq>
+<priority>0.7</priority>
+</url>
+<url>
+<loc>https://osmolab.kz/services/ecommerce</loc>
+<lastmod>2026-01-18T15:20:44.936Z</lastmod>
+<changefreq>weekly</changefreq>
+<priority>0.7</priority>
+</url>
+<url>
+<loc>https://osmolab.kz/services/marketing</loc>
+<lastmod>2026-01-18T15:20:44.936Z</lastmod>
+<changefreq>weekly</changefreq>
+<priority>0.7</priority>
+</url>
+</urlset>

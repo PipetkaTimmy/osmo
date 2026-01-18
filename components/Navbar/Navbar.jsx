@@ -3,10 +3,12 @@
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Button } from "@heroui/react";
+import { Accordion, AccordionItem, Button } from "@heroui/react";
+import { usePathname } from "next/navigation";
+import { defaultServices } from "../../data/services";
 
-const Navbar = () => {
-  const sections = useMemo(
+const Navbar = ({ sections: sectionsProp, serviceLinks: serviceLinksProp }) => {
+  const defaultSections = useMemo(
     () => [
       { id: "hero", label: "Главная" },
       { id: "services", label: "Услуги" },
@@ -16,6 +18,19 @@ const Navbar = () => {
     ],
     []
   );
+  const defaultServiceLinks = useMemo(
+    () =>
+      (defaultServices || []).map((service) => ({
+        label: service.hero?.title || service.title || "Услуга",
+        href: service.buttonHref || `/services/${service.slug}`,
+      })),
+    []
+  );
+  const sections = sectionsProp?.length ? sectionsProp : defaultSections;
+  const pathname = usePathname();
+  const serviceLinks = serviceLinksProp?.length
+    ? serviceLinksProp
+    : defaultServiceLinks;
   const [activeId, setActiveId] = useState(sections[0].id);
   const pendingIdRef = useRef(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -138,6 +153,27 @@ const Navbar = () => {
           <ul className="navDockList">
             {sections.map((section) => {
               const isActive = section.id === activeId;
+              if (section.id === "hero" && pathname !== "/") {
+                return (
+                  <li key={section.id} className="navDockItem">
+                    <a
+                      className={`navDockLink ${isActive ? "is-active" : ""}`}
+                      href="/"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {isActive && (
+                        <motion.span
+                          layoutId="nav-pill"
+                          className="navDockPill"
+                          transition={{ type: "spring", stiffness: 500, damping: 40 }}
+                        />
+                      )}
+                      <span className="navDockText">{section.label}</span>
+                    </a>
+                  </li>
+                );
+              }
+
               return (
                 <li key={section.id} className="navDockItem">
                   <a
@@ -160,11 +196,11 @@ const Navbar = () => {
           </ul>
           <div className="navMobDockList">
             <Button
-              className="navDockMenuButton"
+              className={`navDockMenuButton ${isMenuOpen ? "is-open" : ""}`}
               onPress={() => setIsMenuOpen((open) => !open)}
               type="button"
             >
-              Меню
+              {isMenuOpen ? "Закрыть" : "Меню"}
             </Button>
           </div>
         </motion.div>
@@ -200,26 +236,74 @@ const Navbar = () => {
             >
               <div className="navOverlayHeader">
                 <span>Навигация</span>
-                <button
-                  className="navOverlayClose"
-                  type="button"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Закрыть
-                </button>
               </div>
               <ul className="navOverlayList">
-                {sections.map((section) => (
-                  <li key={section.id} className="navOverlayItem">
-                    <a
-                      className="navOverlayLink"
-                      href={`#${section.id}`}
-                      onClick={handleClick(section.id)}
-                    >
-                      {section.label}
-                    </a>
-                  </li>
-                ))}
+                {sections.map((section) => {
+                  if (section.id === "services") {
+                    return (
+                      <li key={section.id} className="navOverlayItem">
+                        <Accordion className="navOverlayAccordion" variant="splitted">
+                          <AccordionItem
+                            aria-label="Услуги"
+                            title="Услуги"
+                            indicator={
+                              <img
+                                src="/acrd.png"
+                                alt=""
+                                className="navOverlayIndicator"
+                                aria-hidden="true"
+                              />
+                            }
+                            className="navOverlayAccordionItem"
+                            classNames={{
+                              trigger: "navOverlayAccordionTrigger",
+                              title: "navOverlayAccordionTitle",
+                              content: "navOverlayAccordionContent",
+                            }}
+                          >
+                            <div className="navOverlaySubList">
+                              {serviceLinks.map((link) => (
+                                <a
+                                  key={link.href}
+                                  className="navOverlayLink navOverlayServiceLink"
+                                  href={link.href}
+                                  onClick={() => setIsMenuOpen(false)}
+                                >
+                                  {link.label}
+                                </a>
+                              ))}
+                            </div>
+                          </AccordionItem>
+                        </Accordion>
+                      </li>
+                    );
+                  }
+                  if (section.id === "hero" && pathname !== "/") {
+                    return (
+                      <li key={section.id} className="navOverlayItem">
+                        <a
+                          className="navOverlayLink"
+                          href="/"
+                          onClick={() => setIsMenuOpen(false)}
+                        >
+                          {section.label}
+                        </a>
+                      </li>
+                    );
+                  }
+
+                  return (
+                    <li key={section.id} className="navOverlayItem">
+                      <a
+                        className="navOverlayLink"
+                        href={`#${section.id}`}
+                        onClick={handleClick(section.id)}
+                      >
+                        {section.label}
+                      </a>
+                    </li>
+                  );
+                })}
               </ul>
             </motion.div>
           </motion.div>

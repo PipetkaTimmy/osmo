@@ -9,22 +9,22 @@ const Offers = () => {
       {
         title: "Результат",
         body: "Создаём инструменты, которые приносят прибыль и увеличивают конверсию.",
-        image: "/offers/offer-1.png",
+        image: "/offers/offer-1.webp",
       },
       {
         title: "Скорость",
         body: "От идеи до запуска за 14 дней без лишних задержек.",
-        image: "/offers/offer-2.png",
+        image: "/offers/offer-2.webp",
       },
       {
         title: "Поддержка",
         body: "Не бросаем продукт после релиза — развиваем и адаптируем под ваши задачи.",
-        image: "/offers/offer-3.png",
+        image: "/offers/offer-3.webp",
       },
       {
         title: "Прозрачность",
         body: "Открытые коммуникации и честные сроки на каждом этапе.",
-        image: "/offers/offer-4.png",
+        image: "/offers/offer-4.webp",
       },
     ],
     []

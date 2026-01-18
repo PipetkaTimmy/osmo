@@ -4,27 +4,31 @@ import Dots from "../Dots";
 
 const defaultCases = [
   {
-    description: "Айдентика промышленного завода Sottozero",
-    backgroundImage: "/cases/case-1.png",
-    headerItems: ["Разработка сайта", "Тагрет", "Контекст"],
+    description: "Сайт для маркетингово агенства Everest",
+    backgroundImage: "/cases/1/1.webp",
+    caseImages: ["/cases/1/1.webp", "/cases/1/2.webp", "/cases/1/3.webp"],
+    headerItems: ["Разработка сайта"],
     headerIcons: ["/cases/R.png", "/cases/T.png", "/cases/K.png"],
   },
   {
-    description: "Айдентика промышленного завода Sottozero",
-    backgroundImage: "/cases/case-2.png",
-    headerItems: ["Разработка сайта", "Тагрет", "Контекст"],
+    description: "Разработка сайта для анти-кафе EZHUB",
+    backgroundImage: "/cases/2/1.webp",
+    caseImages: ["/cases/2/1.webp", "/cases/2/2.webp", "/cases/2/3.webp"],
+    headerItems: ["Разработка сайта"],
     headerIcons: ["/cases/R.png", "/cases/T.png", "/cases/K.png"],
   },
   {
-    description: "Айдентика промышленного завода Sottozero",
-    backgroundImage: "/cases/case-1.png",
-    headerItems: ["Разработка сайта", "Тагрет", "Контекст"],
+    description: "Разработка интернет магазина Aura Vessels",
+    backgroundImage: "/cases/3/1.webp",
+    caseImages: ["/cases/3/1.webp", "/cases/3/2.webp"],
+    headerItems: ["Разработка сайта"],
     headerIcons: ["/cases/R.png", "/cases/T.png", "/cases/K.png"],
   },
   {
-    description: "Айдентика промышленного завода Sottozero",
-    backgroundImage: "/cases/case-2.png",
-    headerItems: ["Разработка сайта", "Тагрет", "Контекст"],
+    description: "Сервис поиска заведений Urban",
+    backgroundImage: "/cases/4/1.webp",
+    caseImages: ["/cases/4/1.webp", "/cases/4/2.webp", "/cases/4/3.webp"],
+    headerItems: ["Мобильная разработка"],
     headerIcons: ["/cases/R.png", "/cases/T.png", "/cases/K.png"],
   },
 ];

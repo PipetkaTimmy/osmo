@@ -10,7 +10,7 @@ const ServiceCard = ({
 }) => {
     const hasItems = Array.isArray(items) && items.length > 0;
     const cardStyle = backgroundImage
-        ? { backgroundImage: `url(${backgroundImage})` }
+        ? { "--service-bg": `url(${backgroundImage})` }
         : undefined;
 
     return (

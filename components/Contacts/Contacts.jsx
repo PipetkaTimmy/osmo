@@ -6,8 +6,8 @@ import Dots from "../Dots";
 
 const formatPhone = (digits) => {
   const clean = digits.slice(0, 10);
-  if (!clean.length) return "+7";
-  let out = "+7 (" + clean.slice(0, 3);
+  if (!clean.length) return "";
+  let out = "(" + clean.slice(0, 3);
   if (clean.length < 3) return out;
   out += ")";
   if (clean.length > 3) {
@@ -45,6 +45,7 @@ const Contacts = () => {
   const [error, setError] = useState("");
 
   const phoneValue = useMemo(() => formatPhone(form.phone), [form.phone]);
+  const phoneInputRef = React.useRef(null);
 
   const handleChange = (field) => (event) => {
     setForm((prev) => ({ ...prev, [field]: event.target.value }));
@@ -53,6 +54,19 @@ const Contacts = () => {
   const handlePhoneChange = (event) => {
     const digits = normalizePhone(event.target.value);
     setForm((prev) => ({ ...prev, phone: digits }));
+  };
+
+  const handlePhoneKeyDown = (event) => {
+    if (event.key !== "Backspace") return;
+    const input = phoneInputRef.current;
+    if (!input) return;
+    const { selectionStart, selectionEnd, value } = input;
+    if (selectionStart !== selectionEnd) return;
+    if (selectionStart === 0) return;
+    const prevChar = value[selectionStart - 1];
+    if (/\d/.test(prevChar)) return;
+    event.preventDefault();
+    setForm((prev) => ({ ...prev, phone: prev.phone.slice(0, -1) }));
   };
 
   const validate = () => {
@@ -162,6 +176,9 @@ const Contacts = () => {
               inputMode="numeric"
               value={phoneValue}
               onChange={handlePhoneChange}
+              onKeyDown={handlePhoneKeyDown}
+              ref={phoneInputRef}
+              startContent={<span className="contactPhonePrefix">+7</span>}
               classNames={{
                 base: "contactInput",
                 inputWrapper: "contactInputWrapper",

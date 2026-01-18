@@ -2,7 +2,10 @@
 import React from "react";
 import Dots from "../Dots";
 
-const Hero = () => {
+const Hero = ({ title, subtitle, videoSrc, poster }) => {
+  const resolvedTitle = title ?? "Сайты и реклама";
+  const resolvedSubtitle = subtitle ?? "Увеличиваем конверсии, продажи и трафик.";
+  const resolvedVideoSrc = videoSrc ?? "/hero/cubes.mp4";
   return (
     <div className="heroContainer">
       <div className="logo">
@@ -10,7 +13,8 @@ const Hero = () => {
       </div>
       <video
         className="heroVideo"
-        src="/hero/cubes.mp4"
+        src={resolvedVideoSrc}
+        poster={poster}
         autoPlay
         loop
         muted
@@ -19,10 +23,12 @@ const Hero = () => {
       <div className="heroMainText">
         <div className="heroTitle">
           <Dots />
-          <h1>Сайты и реклама</h1>
+          <h1 className="heroGlitch" data-text={resolvedTitle}>
+            {resolvedTitle}
+          </h1>
           <Dots />
         </div>
-        <h2>Увеличиваем конверсии, продажи и трафик.</h2>
+        <h2>{resolvedSubtitle}</h2>
       </div>
     </div>
   );
