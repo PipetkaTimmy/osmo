@@ -1075,7 +1075,7 @@
  }
 
  .serviceIntroFooter p {
-   font-size: clamp(13px, calc(0.915vw + 14.43px), 16px);
+   font-size: clamp(12px, .44vw + 10.17px, 16px);
    color: #ffffff80;
  }
 
