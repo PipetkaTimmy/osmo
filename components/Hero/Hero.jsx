@@ -16,7 +16,7 @@ const Hero = ({ title, subtitle, videoSrc, poster }) => {
         src={resolvedVideoSrc}
         poster={poster}
         autoPlay
-        loop
+        loop={resolvedVideoSrc !== "/hero/cubes.mp4"}
         muted
         playsInline
       />

@@ -384,6 +384,10 @@
    padding: 0;
  }
 
+ .navOverlayAccordion button {
+   padding: 12px 24px;
+ }
+
  .navOverlayAccordionItem {
    background: none;
    border: none;
@@ -415,7 +419,8 @@
 
  .navOverlayAccordionItem[data-open="true"] .navOverlayIndicator,
  .navOverlayAccordionItem [data-open="true"] .navOverlayIndicator {
-   transform: rotate(180deg);
+   transform: rotate(90deg);
+   transition: transform 0.3s ease;
  }
 
  .navOverlayAccordionContent {
@@ -614,29 +619,7 @@
    overflow: hidden;
  }
 
- @media (max-width: 960px) {
-   .servicePageHero {
-     grid-template-columns: 1fr;
-   }
- }
 
- @media (max-width: 960px) {
-   .servicesContainer {
-     grid-template-columns: repeat(2, minmax(0, 1fr));
-   }
- }
-
- @media (max-width: 640px) {
-   .servicesContainer {
-     grid-template-columns: 1fr;
-   }
-
-   .serviceIntro {
-     max-height: 600px;
-     padding: 12px;
-     height: 100%;
-   }
- }
 
  .offersContainer {
    position: relative;
@@ -802,6 +785,16 @@
    opacity: 1;
  }
 
+ @media (max-width: 960px) {
+   .caseCard.is-cursor-active {
+     cursor: pointer;
+   }
+
+   .caseCardHover {
+     display: none;
+   }
+ }
+
  .caseCardHeader {
    display: flex;
    flex-direction: column;
@@ -861,31 +854,6 @@
    width: 100%;
  }
 
- @media (max-width: 960px) {
-   .casesContainer {
-     grid-template-columns: 1fr;
-   }
- }
-
- @media (max-width: 960px) {
-   .offersSticky {
-     height: 100vh;
-     border-radius: 24px;
-   }
-
-   .offersTrack {
-     margin-top: -70vh;
-   }
-
-   .offersItem {
-     height: 100vh;
-     padding: 24px;
-   }
-
-   .offersItem h4 {
-     font-size: 24px;
-   }
- }
 
  .contactsContainer {
    display: flex;
@@ -1048,11 +1016,7 @@
    color: rgba(255, 255, 255, 0.7);
  }
 
- @media (max-width: 960px) {
-   .servicePageHero {
-     grid-template-columns: 1fr;
-   }
- }
+
 
  .serviceIntro {
    width: 100%;
@@ -1172,8 +1136,10 @@
  }
 
  .serviceSolutionsCard p {
-   margin: 0;
-   color: rgba(255, 255, 255, 0.7);
+   color: #ffffff;
+   margin: 0 auto;
+   max-width: 350px;
+   width: 100%;
  }
 
  .serviceSolutionsCardButton {
@@ -1349,18 +1315,63 @@
    display: block;
    width: 32px;
    height: 32px;
-   transition: transform 0.3s ease;
+   transition: transform 0.3s ease, filter 0.3s ease;
    transform: rotate(0deg);
+   filter: grayscale(1) brightness(1.1);
  }
 
  .serviceFaqItem[data-open="true"] .serviceFaqIndicator,
- .serviceFaqItem [data-open="true"] .serviceFaqIndicator {
-   transform: rotate(180deg);
+ .serviceFaqItem [data-open="true"] .serviceFaqIndicator,
+ .serviceFaqItem [aria-expanded="true"] .serviceFaqIndicator {
+   transform: rotate(90deg);
+   filter: none;
+   transition: transform 0.3s ease;
+ }
+
+ .serviceFaqItem [data-slot="indicator"] {
+   transition: transform 0.3s ease;
+   transform: rotate(0deg) !important;
+ }
+
+ .serviceFaqItem [aria-expanded="true"] [data-slot="indicator"] {
+   transform: rotate(180deg) !important;
  }
 
  .serviceFaqItem p {
    margin: 12px 0 0;
    color: rgba(255, 255, 255, 0.75);
+ }
+
+ @media (max-width: 960px) {
+   .servicesContainer {
+     grid-template-columns: repeat(2, minmax(0, 1fr));
+   }
+
+   .servicePageHero {
+     grid-template-columns: 1fr;
+   }
+
+   .offersSticky {
+     height: 100vh;
+     border-radius: 24px;
+   }
+
+   .offersTrack {
+     margin-top: -70vh;
+   }
+
+   .offersItem {
+     height: 100vh;
+     padding: 24px;
+   }
+
+   .offersItem h4 {
+     font-size: 24px;
+   }
+
+   .casesContainer {
+     grid-template-columns: 1fr;
+   }
  }
 
  @media (max-width: 768px) {
@@ -1508,7 +1519,23 @@
      padding: 0;
    }
 
+   .navOverlayAccordion button {
+     padding: 12px 24px;
+   }
+
    .serviceIntroCard {
      padding: 16px;
+   }
+ }
+
+ @media (max-width: 640px) {
+   .servicesContainer {
+     grid-template-columns: 1fr;
+   }
+
+   .serviceIntro {
+     max-height: 600px;
+     padding: 12px;
+     height: 100%;
    }
  }

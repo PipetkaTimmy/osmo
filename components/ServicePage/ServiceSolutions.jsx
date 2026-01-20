@@ -33,6 +33,11 @@ const ServiceSolutions = ({ title, items }) => {
   const who = modal.who || [];
   const benefits = modal.benefits || [];
   const cta = modal.cta || "Получить консультацию";
+  const waTitle = activeItem?.title || "услугой";
+  const waText = encodeURIComponent(
+    `Здравствуйте, хочу поинтересоваться услугой: ${waTitle}.`
+  );
+  const waHref = `https://wa.me/77066675818?text=${waText}`;
 
   return (
     <section className="serviceSolutions">
@@ -109,7 +114,16 @@ const ServiceSolutions = ({ title, items }) => {
                 )}
               </DrawerBody>
               <DrawerFooter className="serviceDrawerFooter">
-                <Button className="serviceDrawerCta">{cta}</Button>
+                <Button
+                  as="a"
+                  href={waHref}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="serviceDrawerCta"
+                  onPress={onClose}
+                >
+                  {cta}
+                </Button>
               </DrawerFooter>
             </>
           )}
